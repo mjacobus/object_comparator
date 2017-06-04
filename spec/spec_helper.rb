@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "object_comparator"
+require "object_comparator/rspec"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -7,5 +7,11 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+end
+
+class DummyClass
+  def initialize(arg)
+    @arg = arg
   end
 end

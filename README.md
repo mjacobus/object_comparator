@@ -1,8 +1,10 @@
 # ObjectComparator
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/object_comparator`. To experiment with that code, run `bin/console` for an interactive prompt.
+Helps compare objects internals with rspec without having to implement `equal?` or `==`.
 
-TODO: Delete this and the text above, and describe your gem
+[![Build Status](https://travis-ci.org/mjacobus/object_comparator.svg?branch=master)](https://travis-ci.org/mjacobus/object_comparator)
+[![Code Climate](https://codeclimate.com/github/mjacobus/object_comparator/badges/gpa.svg)](https://codeclimate.com/github/mjacobus/object_comparator)
+[![Issue Count](https://codeclimate.com/github/mjacobus/object_comparator/badges/issue_count.svg)](https://codeclimate.com/github/mjacobus/object_comparator)
 
 ## Installation
 
@@ -12,17 +14,55 @@ Add this line to your application's Gemfile:
 gem 'object_comparator'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install object_comparator
-
 ## Usage
 
-TODO: Write usage instructions here
+### RSpec
+
+```ruby
+# spec/spec_helper.rb
+
+require "object_comparator/rspec"
+
+# your spec file
+
+require 'spec_helper'
+
+RSpec.describe MyUserService do
+  it 'creates user' do
+    a = User.new(id: 1, name: 'John Doe')
+    b = a.dup
+
+    expect(a).not_to be(b)
+
+    # this is what you get, no reason need to implement equal?
+    expect(a).to be_equal_to(b)
+  end
+end
+```
+
+### Minitest
+
+```ruby
+require 'object_comparator/minitest'
+
+class ObjectComparatorTest < Minitest::Test
+  include ObjectComparator::Minitest
+
+  def test_can_assert
+    a = User.new(id: 1, name: 'John Doe')
+    b = b.dup
+
+    assert_equal_objects(a, b)
+  end
+
+  def test_can_refute
+    a = User.new(id: 1, name: 'John Doe')
+    b = User.new(id: 1, name: 'Other name')
+
+    refute_equal_objects(a, b)
+  end
+end
+```
 
 ## Development
 
