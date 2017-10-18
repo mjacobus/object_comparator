@@ -3,6 +3,10 @@ require 'spec_helper'
 RSpec.describe ObjectComparator do
   subject { ObjectComparator.new }
 
+  def failing_message_for(one, two)
+    ObjectComparator.new.failing_message_for(one, two)
+  end
+
   def create(last = { foo: :bar })
     DummyClass.new(foo: DummyClass.new(bar: last))
   end
@@ -13,8 +17,14 @@ RSpec.describe ObjectComparator do
 
   describe '#is_equal_to?' do
     it 'returns true when objects are equal, but different object id' do
-      expect(subject.equal?(create, create)).to be(true)
-      expect(subject.equal?(create(deep), create(deep))).to be(true)
+      one = create
+      two = create
+
+      one_deep = create(deep)
+      two_deep = create(deep)
+
+      expect(subject.equal?(one, two)).to be(true), failing_message_for(one, two)
+      expect(subject.equal?(one_deep, two_deep)).to be(true), failing_message_for(one_deep, two_deep)
     end
 
     it 'returns false when objects have different property' do
@@ -54,6 +64,15 @@ RSpec.describe ObjectComparator::InspectionString do
     it 'removes the object ids' do
       expect(subject.to_s).to eq(clean_inspection_string)
     end
+
+    it 'removes the object ids from deep objects' do
+      input = '<DummyClass:0x00007fd324baf190 @arg={:foo=>#<DummyClass:0x00007fd324baf1e0 @arg={:bar=>{:foo=>:bar}}>}>'
+
+      expected = '<DummyClass @arg={:foo=>#<DummyClass @arg={:bar=>{:foo=>:bar}}>}>'
+
+      expect(described_class.new(input).to_s).to eq(expected)
+    end
+
 
     it 'also remove ids from empty objects' do
       string = described_class.new('<SomeClass:0x007f8be52ad960>').to_s
