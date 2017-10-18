@@ -2,18 +2,22 @@ require 'object_comparator'
 
 class ObjectComparator
   module Minitest
-    def assert_equal_objects(obj1, obj2, message = nil)
-      obj1 = InspectionString.new(obj1.inspect)
-      obj2 = InspectionString.new(obj2.inspect)
+    def assert_equal_objects(expected, actual, message = nil)
+      expected = InspectionString.new(expected.inspect)
+      actual = InspectionString.new(actual.inspect)
 
-      assert_equal(obj1, obj2, message)
+      message ||= ObjectComparator.new.failing_message_for_should(expected, actual)
+
+      assert_equal(expected, actual, message)
     end
 
-    def refute_equal_objects(obj1, obj2, message = nil)
-      obj1 = InspectionString.new(obj1.inspect)
-      obj2 = InspectionString.new(obj2.inspect)
+    def refute_equal_objects(expected, actual, message = nil)
+      expected = InspectionString.new(expected.inspect)
+      actual = InspectionString.new(actual.inspect)
 
-      refute_equal(obj1, obj2, message)
+      message ||= ObjectComparator.new.failing_message_for_should_not(expected, actual)
+
+      refute_equal(expected, actual, message)
     end
   end
 end
