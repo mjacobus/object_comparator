@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Comparison of objects for tests}
   spec.description   = %q{Comparison of objects for tests}
-  spec.homepage      = "https://github.com/mjacobus/object-comparator"
+  spec.homepage      = "https://github.com/mjacobus/object_comparator"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "minitest"
-  spec.add_development_dependency "bundler", "~> 1.14"
+  spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 end
